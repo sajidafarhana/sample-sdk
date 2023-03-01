@@ -1,0 +1,104 @@
+//plugins {
+//    id 'com.android.application'
+//    id 'org.jetbrains.kotlin.android'
+//}
+//
+//android {
+//    namespace 'com.example.samplesdk'
+//    compileSdk 32
+//
+//    defaultConfig {
+//        applicationId "com.example.samplesdk.app"
+//        minSdk 24
+//        targetSdk 32
+//        versionCode 1
+//        versionName "1.0"
+//
+//        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+//    }
+//
+//    compileOptions {
+//        sourceCompatibility JavaVersion.VERSION_1_8
+//        targetCompatibility JavaVersion.VERSION_1_8
+//    }
+//
+//    kotlinOptions {
+//        jvmTarget = '1.8'
+//    }
+//
+//    dataBinding {
+//        enabled = true
+//    }
+//
+//    buildTypes {
+//        release {
+//            minifyEnabled false
+//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+//        }
+//    }
+//
+//}
+//
+//dependencies {
+//    implementation kotlinSdk
+//    kaptLibs.values().forEach { kapt it }
+//    droid.values().forEach { implementation it }
+//    di.values().forEach { implementation it }
+//    rx.values().forEach { implementation it }
+//    grabLibs.values().forEach { implementation it }
+//
+//    network.values().forEach { implementation it }
+//
+//    implementation project(":sdk")
+//
+//    testLibs.values().forEach { testImplementation it }
+//    uiTestLibs.values().forEach { androidTestImplementation it }
+//}
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion compileVersionSdk
+
+    defaultConfig {
+        applicationId "com.example.samplesdk.app"
+        minSdkVersion projectMinSdkVersion
+        targetSdkVersion targetSdkVersion
+        versionCode projectVersionCode
+        versionName projectVersionName
+
+        multiDexEnabled true
+
+//        testInstrumentationRunner "com.moca.kyc.app.KycSdkRunner"
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation kotlinSdk
+    kaptLibs.values().forEach { kapt it }
+    droid.values().forEach { implementation it }
+    di.values().forEach { implementation it }
+    rx.values().forEach { implementation it }
+    network.values().forEach { implementation it }
+    devLibs.values().forEach { debugImplementation it }
+//    implementation project(":sdk")
+
+    testLibs.values().forEach { testImplementation it }
+    uiTestLibs.values().forEach { androidTestImplementation it }
+
+}

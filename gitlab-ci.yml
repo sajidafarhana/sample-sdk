@@ -1,0 +1,43 @@
+# YAML Specification: https://docs.gitlab.com/ee/ci/yaml/README.html
+
+# The image to use for build environment, if not a URL it will attempt to pull
+# it from the public docker registry
+
+# Example of using an image in your project specific registry. For more info
+# check https://gitlab.myteksi.net/mobile/dax-android/container_registry
+
+# You can syntax-check your Gitlab CI @
+# https://gitlab.myteksi.net/mobile/dax-android/-/ci/lint
+
+image: gitlab.myteksi.net:4567/mobile/pax-android/final-android-28:1.1.2
+stages:
+  - build
+  - test
+  - publish
+
+before_script:
+  - export GRADLE_USER_HOME=$(pwd)/.gradle
+  - chmod +x ./gradlew
+
+build:
+  stage: build
+  script:
+    - ./gradlew assembleDebug
+
+test:
+  stage: test
+  script:
+    - ./gradlew jacocoTestReport
+  artifacts:
+    reports:
+      junit: sdk/build/reports/jacoco/jacocoTestReport/html/index.xml
+    expire_in: 30 days
+
+publishSdk:
+  stage: publish
+  tags:
+    - xlarge
+  script:
+    - ./gradlew assembleRelease -PbuildNumber=$CI_JOB_ID
+    - ./gradlew publish -Pversion=$CI_COMMIT_SHORT_SHA --no-daemon --no-build-cache
+  when: manual
